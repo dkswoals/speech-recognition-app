@@ -29,7 +29,7 @@ Flask와 Whisper AI를 활용한 실시간 음성 인식 웹 애플리케이션�
 
 1. **저장소 클론**
 ```bash
-git clone https://github.com/your-username/speech-recognition-app.git
+git clone https://github.com/dkswoals/speech-recognition-app.git
 cd speech-recognition-app
 ```
 
