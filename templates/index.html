@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Alert Messages -->
+        <div id="alert-container"></div>
+        
+        <!-- Control Panel -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-sliders-h me-2"></i>
+                    음성 인식 제어판
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- WebSocket URL Configuration -->
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="websocket-url" class="form-label">WebSocket URL</label>
+                        <input type="text" class="form-control" id="websocket-url" 
+                               placeholder="ws://localhost:5000/audio">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-primary w-100" id="connect-btn">
+                            <i class="fas fa-plug me-1"></i>
+                            연결
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Recording Controls -->
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-success btn-lg" id="start-recording" disabled>
+                        <i class="fas fa-microphone me-2"></i>
+                        녹음 시작
+                    </button>
+                    <button type="button" class="btn btn-danger btn-lg" id="stop-recording" disabled>
+                        <i class="fas fa-stop me-2"></i>
+                        녹음 중지
+                    </button>
+                    <button type="button" class="btn btn-warning btn-lg" id="clear-transcriptions">
+                        <i class="fas fa-trash me-2"></i>
+                        내용 지우기
+                    </button>
+                </div>
+                
+                <!-- Recording Status -->
+                <div class="mt-3">
+                    <div class="text-center">
+                        <span class="badge bg-secondary fs-6" id="recording-status">
+                            <i class="fas fa-circle me-1"></i>
+                            대기 중
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Audio Visualizer (Optional) -->
+        <div class="card shadow-sm mb-4" id="visualizer-card" style="display: none;">
+            <div class="card-body text-center">
+                <canvas id="audio-visualizer" width="800" height="100"></canvas>
+            </div>
+        </div>
+        
+        <!-- Transcription Results -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-comments me-2"></i>
+                    인식 결과
+                </h5>
+                <span class="badge bg-light text-dark" id="transcription-count">0개</span>
+            </div>
+            <div class="card-body" id="transcriptions-container">
+                <div class="text-center text-muted py-5" id="empty-state">
+                    <i class="fas fa-microphone fa-3x mb-3 opacity-50"></i>
+                    <p class="mb-0">음성을 녹음하면 여기에 인식된 텍스트가 표시됩니다.</p>
+                    <small>마이크 버튼을 눌러 녹음을 시작하세요.</small>
+                </div>
+                <div id="transcriptions-list"></div>
+            </div>
+        </div>
+        
+        <!-- Statistics Panel -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-2x mb-2"></i>
+                        <h5 class="card-title">총 녹음 시간</h5>
+                        <p class="card-text fs-4" id="total-recording-time">00:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-warning text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-alt fa-2x mb-2"></i>
+                        <h5 class="card-title">인식된 문장</h5>
+                        <p class="card-text fs-4" id="total-sentences">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-font fa-2x mb-2"></i>
+                        <h5 class="card-title">총 글자 수</h5>
+                        <p class="card-text fs-4" id="total-characters">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-download me-2"></i>
+                    텍스트 내보내기
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" id="export-text" rows="10" readonly></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="copy-text">
+                    <i class="fas fa-copy me-1"></i>
+                    클립보드에 복사
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 페이지 로드시 WebSocket URL 자동 설정
+    document.addEventListener('DOMContentLoaded', function() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.host;
+        const websocketUrl = `${protocol}//${host}/audio`;
+        document.getElementById('websocket-url').value = websocketUrl;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,229 @@
+/* 전역 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* 커스텀 애니메이션 */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes recording {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* 연결 상태 스타일 */
+.status-connected {
+    color: #28a745 !important;
+}
+
+.status-disconnected {
+    color: #dc3545 !important;
+}
+
+.status-connecting {
+    color: #ffc107 !important;
+    animation: pulse 1s infinite;
+}
+
+/* 녹음 상태 스타일 */
+.recording-active {
+    animation: recording 1s infinite;
+    background: linear-gradient(45deg, #dc3545, #fd7e14) !important;
+    color: white !important;
+}
+
+.recording-pulse {
+    animation: pulse 1s infinite;
+}
+
+/* 전사 결과 스타일 */
+.transcription-item {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 4px solid #007bff;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.transcription-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.transcription-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.transcription-meta {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.transcription-language {
+    background: #e3f2fd;
+    color: #1976d2;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* 오디오 시각화 */
+#audio-visualizer {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+}
+
+/* 버튼 스타일 개선 */
+.btn-lg {
+    padding: 12px 24px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-lg:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 카드 스타일 */
+.card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    border: none;
+    font-weight: 500;
+}
+
+/* 통계 카드 */
+.card.bg-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.card.bg-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+}
+
+.card.bg-secondary {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .btn-lg {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .transcription-text {
+        font-size: 1rem;
+    }
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 성공/오류 메시지 */
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
+    color: #721c24;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+}
+
+/* 공백 상태 스타일 */
+#empty-state {
+    transition: all 0.3s ease;
+}
+
+#empty-state.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* 전사 목록 애니메이션 */
+.transcription-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 스크롤바 스타일 (webkit 기반 브라우저) */
+#transcriptions-container {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#transcriptions-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#transcriptions-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#transcriptions-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+#transcriptions-container::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
