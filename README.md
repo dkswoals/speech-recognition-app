@@ -18,6 +18,9 @@ Flask와 Whisper AI를 활용한 실시간 음성 인식 웹 애플리케이션�
 - **Frontend**: HTML5, Bootstrap 5, JavaScript
 - **AI Model**: OpenAI Whisper
 
+### 실제 서비스 모습
+![image](https://github.com/user-attachments/assets/e28cda03-ab5d-4900-b2a7-5d557517c2f0)
+
 ## 🚀 설치 가이드
 
 ### 시스템 요구사항
